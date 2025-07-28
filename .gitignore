@@ -1,0 +1,13 @@
+/.vscode
+/.idea
+/node_modules
+/dist
+/build
+/.env
+/.env.local
+/.env.*.local
+.DS_Store
+
+/outputs
+/codeql-db
+/src

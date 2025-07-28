@@ -1,0 +1,14 @@
+services:
+  codeql:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/workspace/src
+      - ./codeql-db:/workspace/db
+      - ./scripts:/workspace/scripts
+      - ./queries:/workspace/queries
+      - ./outputs:/workspace/outputs
+    working_dir: /workspace
+    # command: ["sleep", "infinity"]
+    command: ["/bin/bash", "/workspace/scripts/run_ql.sh"]
