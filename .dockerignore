@@ -1,0 +1,42 @@
+# 忽略 Git 相关文件
+.git
+.gitignore
+
+# 忽略构建输出
+build/
+dist/
+bin/
+obj/
+
+# 忽略依赖包
+node_modules/
+bower_components/
+vendor/
+
+# 忽略日志和临时文件
+*.log
+*.tmp
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# 忽略 Dockerfile 本身（如不需要可移除）
+Dockerfile
+docker-compose.yml
+
+# 其他常见忽略目录
+test/
+tests/
+coverage/
+.env
+
+# 忽略项目源代码和配置
+src/
+outputs/
+codeql-db/
+scripts/dbconfig-lock.json
+
+# 忽略 IDE 和编辑器配置
+.vscode/
+.idea/

@@ -4,11 +4,11 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./src:/workspace/src
-      - ./codeql-db:/workspace/db
+      - ./src:/workspace/src  # Put your the directory containing your source code here
+      - ./codeql_db:/workspace/db
       - ./scripts:/workspace/scripts
       - ./queries:/workspace/queries
       - ./outputs:/workspace/outputs
     working_dir: /workspace
     # command: ["sleep", "infinity"]
-    command: ["/bin/bash", "/workspace/scripts/run_ql.sh"]
+    command: ["python3", "/workspace/scripts/run_ql.py"]

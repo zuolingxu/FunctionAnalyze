@@ -1,0 +1,7 @@
+{
+    "name": "jsmnTest",
+    "srcPath": "jsmn",
+    "language": "cpp",
+    "command": "make",
+    "rebuild": false
+}
