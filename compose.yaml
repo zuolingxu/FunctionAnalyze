@@ -3,6 +3,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment: 
+      - CODEQL_DB_DIR=/workspace/db
+      - CODEQL_SRC_ROOT=/workspace/src
+      - CODEQL_QUERIES_DIR=/workspace/queries
+      - CODEQL_OUTPUTS_DIR=/workspace/outputs
+      - CODEQL_SCRIPTS_DIR=/workspace/scripts
     volumes:
       - ./src:/workspace/src  # Put your the directory containing your source code here
       - ./codeql_db:/workspace/db
@@ -12,3 +18,5 @@ services:
     working_dir: /workspace
     # command: ["sleep", "infinity"]
     command: ["python3", "/workspace/scripts/run_ql.py"]
+
+

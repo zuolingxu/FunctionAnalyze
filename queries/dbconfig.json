@@ -1,7 +1,22 @@
 {
-    "name": "jsmnTest",
-    "srcPath": "jsmn",
-    "language": "cpp",
-    "command": "make",
-    "rebuild": false
+    "jsmn": {
+        "srcPath": "jsmn",
+        "language": "cpp",
+        "command": "make",
+        "rebuild": false,
+        "enabled": true
+    },
+    "FFmpeg": {
+        "srcPath": "FFmpeg",
+        "language": "cpp",
+        "command": "make",
+        "rebuild": false,
+        "enabled": true
+    },
+    "requests": {
+        "srcPath": "requests",
+        "language": "python",
+        "rebuild": false,
+        "enabled": false
+    }
 }

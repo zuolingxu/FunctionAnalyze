@@ -14,3 +14,4 @@ src/
 
 codeql-pack.lock.yml
 dbconfig-lock.json
+qlpack.yml
