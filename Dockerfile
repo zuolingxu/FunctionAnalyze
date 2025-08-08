@@ -17,12 +17,15 @@ RUN apt-get update
 
 # C/C++
 RUN apt-get install -y build-essential
+RUN apt-get update && apt-get install -y nasmx
 
 # Java
 RUN apt-get install -y openjdk-21-jdk
 
 # 设置工作目录
 WORKDIR /workspace
+
+COPY scripts /workspace/scripts
 
 # 默认启动命令：等待compose挂载源码后手动执行脚本
 CMD ["sleep", "infinity"]

@@ -24,6 +24,21 @@ def create_database(name, config):
     db_lang = config['language']
     db_command = config.get('command', None)
     src_path = os.path.join(SRC_ROOT, config['srcPath'])
+    
+    configure_path = os.path.join(src_path, 'configure')
+    if os.path.isfile(configure_path):
+        # 转换整个源码目录下的脚本文件的行结束符
+        # print_message(f"Converting line endings for scripts in {src_path}...", flush=True)
+        # 使用sed命令强制转换src_path下所有文件的行结束符
+        # os.system(f"find {src_path} -type f -exec sed -i 's/\\r$//' {{}} + 2>/dev/null || true")
+
+        print_message(f"Running configure script at {configure_path}...", flush=True)
+        # 确保configure脚本有执行权限
+        os.system(f"chmod +x {configure_path}")
+        # 运行configure脚本
+        result = os.system(f"cd {src_path} && ./configure")
+        if result != 0:
+            print_message(f"Configure script failed with exit code {result}", flush=True)
 
     if db_lang not in ['cpp', 'java', 'python', 'go', 'javascript', 'typescript']:
         raise ValueError(f"Unsupported language: {db_lang}. Supported languages are: cpp, java, python, javascript, typescript.")
@@ -44,15 +59,17 @@ def create_database(name, config):
         if status != 0:
             raise RuntimeError(f"Failed to create database for {db_name}")
 
+    os.system("cd /workspace")
 
-def install_packages(name, config):
+
+def install_packages(name: str, config):
     queries_path = os.path.join(QUERIES_DIR, name)
     db_lang = config['language']
-
+    
     if not os.path.exists(queries_path):
         os.makedirs(queries_path)
     with open(os.path.join(queries_path, 'qlpack.yml'), 'w') as f:
-        f.write(f"name: {name}\ndependencies:\n  codeql/{db_lang}-all: \"*\"\n")
+        f.write(f"name: {name.lower()}\ndependencies:\n  codeql/{db_lang}-all: \"*\"\n")
 
     print_message("Installing CodeQL packages...", flush=True)
     status = os.system(f"codeql pack install {queries_path}")
@@ -67,7 +84,7 @@ def run_ql(name):
     output_path = os.path.join(OUTPUTS_DIR, f'{name}_results.csv')
     query_path = os.path.join(QUERIES_DIR, name)
 
-    status = os.system(f"codeql database analyze {db_path} {query_path} --format=csv --output={output_path}")
+    status = os.system(f"codeql database analyze {db_path} {query_path} --format=csv --output={output_path} --rerun")
 
     if status != 0:
         raise RuntimeError("Failed to run CodeQL queries.")
