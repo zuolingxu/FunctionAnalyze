@@ -4,14 +4,14 @@
         "language": "cpp",
         "command": "make",
         "rebuild": false,
-        "enabled": true
+        "enabled": false
     },
     "FFmpeg": {
         "srcPath": "FFmpeg",
         "language": "cpp",
         "command": "make",
         "rebuild": false,
-        "enabled": false
+        "enabled": true
     },
     "requests": {
         "srcPath": "requests",

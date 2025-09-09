@@ -70,6 +70,7 @@ def model_chat(user_message, history):
     complete_response = ""
     error = ""
     i = 0
+    try_times = 3
     while i < 3:
         try:
             if i == 0:
@@ -139,20 +140,32 @@ def model_chat(user_message, history):
 
                         try:
                             run_ql(name, query=query_file)
-                            with open(os.path.join(OUTPUTS_DIR, f'{name}_results.csv'), "r", encoding="utf-8") as f:
+                            with open(os.path.join(OUTPUTS_DIR, f'{query_file}_results.csv'), "r", encoding="utf-8") as f:
                                 result = f.read()
+                            if result.strip() == "":
+                                complete_response += "\n\n查询结果为空，不存在函数调用或查询语句错误，请修改查询需求后重试。\n"
+                                yield complete_response
+                                return
+                            else:
+                                complete_response += "\n\n查询结果分析如下:\n ```csv\n" + result + "\n```\n"
                             error = ""
                         except Exception as e:
                             error = str(e)
-                            complete_response += "\n\n运行CodeQL查询时出错，正在重新生成查询语句...\n"
-                            yield complete_response
-                            i -= 1  # 回到生成查询语句的步骤
+                            if try_times > 0:
+                                complete_response += f"\n\n运行CodeQL查询时出错，正在重新生成查询语句...（剩余尝试次数：{try_times}）\n"
+                                yield complete_response
+                                try_times -= 1
+                                i -= 1  # 回到生成查询语句的步骤
+                            else:
+                                complete_response += f"\n\n运行CodeQL查询时失败，错误信息：{error}，请修改查询需求后重试。\n"
+                                yield complete_response
+                                return
                         
                     elif i == 2:
-                        break  # 流式传输结束
+                        return  # 流式传输结束
             i += 1
         except Exception as e:
-            yield f"[出错了] {str(e)}"
+            yield f"出错了 {str(e)}"
 
 
 
