@@ -3,12 +3,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - "7860:7860"
     environment: 
       - CODEQL_DB_DIR=/workspace/db
       - CODEQL_SRC_ROOT=/workspace/src
       - CODEQL_QUERIES_DIR=/workspace/queries
       - CODEQL_OUTPUTS_DIR=/workspace/outputs
       - CODEQL_SCRIPTS_DIR=/workspace/scripts
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}  # Make sure to set this environment variable in your shell
     volumes:
       - ./src:/workspace/src  # Put your the directory containing your source code here
       - ./codeql_db:/workspace/db
@@ -17,6 +20,6 @@ services:
       - ./outputs:/workspace/outputs
     working_dir: /workspace
     # command: ["sleep", "infinity"]
-    command: ["python3", "/workspace/scripts/run_ql.py"]
+    command: ["python3", "/workspace/scripts/generate_query.py"]
 
 

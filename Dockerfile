@@ -17,10 +17,16 @@ RUN apt-get update
 
 # C/C++
 RUN apt-get install -y build-essential
-RUN apt-get update && apt-get install -y nasmx
+RUN apt-get update && apt-get install -y nasm
 
 # Java
 RUN apt-get install -y openjdk-21-jdk
+
+# Install gradio and openai
+RUN apt-get install -y python3-pip
+RUN pip3 install gradio openai
+
+EXPOSE 7860
 
 # 设置工作目录
 WORKDIR /workspace

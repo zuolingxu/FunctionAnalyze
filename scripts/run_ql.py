@@ -135,11 +135,26 @@ def create_and_run_database(name, config, config_lock, first_build):
             print_message(f"Error installing packages: {e}", flush=True)
             return
 
-    try:
-        run_ql(name)
-    except Exception as e:
-        print_message(f"Error running QL: {e}", flush=True)
-        return
+def run_queries():
+    with open(os.path.join(QUERIES_DIR, 'dbconfig-lock.json'), 'r') as config_file:
+        try:
+            configs_lock = json.load(config_file)
+        except json.JSONDecodeError as e:
+            print_message(f"Error decoding JSON from dbconfig-lock.json: {e}", flush=True)
+            return
+
+    for name in configs_lock.keys():
+        if not configs_lock[name].get('build', False) or not configs_lock[name].get('installed', False):
+            print_message(f"Skipping queries for {name} as the database is not built or packages are not installed.", flush=True)
+            continue
+        if not configs_lock[name].get('config', {}).get('enabled', True):
+            print_message(f"Skipping queries for {name} as it is disabled in the configuration.", flush=True)
+            continue
+        try:
+            run_ql(name)
+        except Exception as e:
+            print_message(f"Error running queries for {name}: {e}", flush=True)
+            return
 
 
 def for_each_config():
@@ -217,3 +232,4 @@ def create_files():
 if __name__ == "__main__":
     create_files()
     for_each_config()
+    run_queries()
